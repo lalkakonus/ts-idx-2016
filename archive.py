@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 import md5
-from varbyte_code import *
+from varbyte import *
 from doc2words import extract_words
 
 # ordered URLs

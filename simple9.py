@@ -1,22 +1,29 @@
-from struct import *
+# encoding: utf-8
+# Kononov Sergey BD-21
 
-EXP = [1, 2, 3, 4, 5, 7, 9, 14, 28]
-EXP_LEN = len(EXP)
-BORDER = [2 ** x for x in EXP]
+from struct import pack, unpack
+
+# TEST MODE
+# import random
+# import time
+
+BITS = [1, 2, 3, 4, 5, 7, 9, 14, 28]
+BITS_LEN = len(BITS)
+BORDER = [2 ** x for x in BITS]
 PAYLOAD_SIZE = 28
 
 def define_size(value):
-    global EXP, EXP_LEN, BORDER
+    global BITS, BITS_LEN, BORDER
 
-    for idx in range(EXP_LEN):
+    for idx in range(BITS_LEN):
         if value < BORDER[idx]:
-            return EXP[idx]
+            return BITS[idx]
     return None
 
 def define_count(sequence):
+    global PAYLOAD_SIZE
     cnt = 0
     maximum = 0
-    global PAYLOAD_SIZE
     
     for elem in sequence:
         cnt += 1
@@ -30,17 +37,14 @@ def define_count(sequence):
 def code_word(sequence):
     cnt = define_count(sequence)
     round_cnt = 28
-    pos = 0
 
-    for i, x in enumerate(EXP): 
+    for i, x in enumerate(BITS): 
         if x > cnt:
-            round_cnt = EXP[i - 1]
+            round_cnt = BITS[i - 1]
             break
+    size = PAYLOAD_SIZE / round_cnt
 
-    size = PAYLOAD_SIZE / round_cnt #EXP[pos]
-
-    compressed = 0
-    compressed |= round_cnt << PAYLOAD_SIZE
+    compressed = round_cnt << PAYLOAD_SIZE
     for i in range(cnt):
         compressed |= sequence[i] << size * i
 
@@ -57,19 +61,17 @@ def code(sequence):
     return data_out
 
 def decode_word(word):
-    mask = int(b'11110000', 2)
-    
     cnt = bytearray(word[3])[0] >> 4
     size = PAYLOAD_SIZE / cnt 
+    mask = int('1' * size, 2)
     
-    binary_data = unpack('i', word)[0] #bytearray(word)
-    res = []
-    mask = int('1' * int(size), 2)
+    result = []
+    binary_data = unpack('i', word)[0]
     for i in range(cnt):
-        res.append(binary_data & mask)
+        result.append(binary_data & mask)
         binary_data = binary_data >> size
 
-    return filter(lambda x: x != 0, res)
+    return filter(lambda x: x != 0, result)
 
 def decode(data_in):
     size = len(data_in) / 4
@@ -80,5 +82,13 @@ def decode(data_in):
 
     return data_out
 
-a = range(1, 30)
-print a == decode(code(a))
+# TEST
+# 
+# test = range(1, 10000)
+# random.shuffle(test)
+# t1 = time.time()
+# res = test == decode(code(test))
+# t2 = time.time()
+# 
+# print 'simple9 archive tests :', res * 'OK' + ~res * 'ERROR'
+# print '[1, 10000] compressed and decompressed in', t2 - t1, 'sec'
