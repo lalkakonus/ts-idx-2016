@@ -1,9 +1,22 @@
+# encoding: utf-8
+
 from docreader import *
+from parser import *
+from archive import index_data
+
 
 if __name__ == '__main__':
     reader = DocumentStreamReader(parse_command_line().files)
-    # for doc in reader:
-    doc = next(reader.__iter__())
-    print doc.url
-    print doc.text[:100]
-    # print "%s\t%d bytes" % (doc.url, len(doc.text))
+    
+    index_data(reader)
+
+    # N = 2000
+    # LENGTH = 200
+    # loop = iter(reader)
+    # for i in range(N):
+    #     doc = next(loop)
+    #     print 'Doc # ', i,': ', doc.text[:LENGTH]
+    #     text  = extract_words(doc.text[:LENGTH])
+    #     index_doc(doc.url, text)
+
+    print parse_query('в')
