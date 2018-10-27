@@ -4,15 +4,15 @@ from varbyte_code import *
 import md5
 from archive import dic, doc_id
 
-def retrive_assosiated(word):
-    global dic
-
-    idxs = dic.get(md5.new(word).digest())
-    
-    if idxs is not None:
-        return uncode_buffer(idxs)
-    else:
-        return None
+# def retrive_assosiated(word):
+#     global dic
+# 
+#     idxs = dic.get(md5.new(word).digest())
+#     
+#     if idxs is not None:
+#         return uncode_buffer(idxs)
+#     else:
+#         return None
 
 def parse_query(query):
     global dic, doc_id
