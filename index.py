@@ -1,5 +1,4 @@
-#!usr/bin/python2
-# vim : set fileencoding=utf-8 :
+#!usr/bin/env python
 # Kononov Sergey BD-21
 
 from docreader import *
@@ -12,10 +11,13 @@ if not os.access('Data', os.F_OK):
     os.mkdir('Data')
 
 # Delete existance data
-if os.access('Data/compressd_id.pckl', os.F_OK):
-    os.remove('Data/compressd_id.pckl')
-    os.remove('Data/compressd_dic.pckl')
+if os.access('Data/compressed_id.pckl', os.F_OK):
+    os.remove('Data/compressed_id.pckl')
+
+if os.access('Data/compressed_dic.pckl', os.F_OK):
+    os.remove('Data/compressed_dic.pckl')
 
 if __name__ == '__main__':
+    archivation_type = parse_command_line().archivation
     reader = DocumentStreamReader(parse_command_line().files)
-    index_data(reader)
+    index_data(reader, archivation_type)

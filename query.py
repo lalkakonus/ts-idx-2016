@@ -22,22 +22,23 @@ def load_data():
         print 'Error, data not exist'
         return
 
-    dic = load_obj('Data/compressed_dict.pckl')
-    doc_id = load_obj('Data/compressed_id.pckl')
+    archive_type, dic = load_obj('Data/compressed_dict.pckl')
+    archive_type, doc_id = load_obj('Data/compressed_id.pckl')
     
-    print '# Data sucsessefully load from Data directory'
-    print '# Total word amount :', len(dic)
-    print '# URLs count :', len(doc_id)
+    # print '# Data sucsessefully load from Data directory'
+    # print '# Arcivation type :', archive_type
+    # print '# Total word amount :', len(dic)
+    # print '# URLs count :', len(doc_id)
     
-    return dic, doc_id, len(dic)
+    return dic, doc_id, len(dic), archive_type
 
-def execute_list(query_list, dic, doc_id, N):
+def execute_list(query_list, dic, doc_id, N, decode):
     result_list = []
     for query in query_list:
 
         # query = 'в & !к'
         q_tree = parse(query)
-        activate_node(q_tree, N, dic)
+        activate_node(q_tree, N, dic, decode)
         id_set = execute(q_tree)
         #print id_set
         result = [doc_id[idx - 1] for idx in id_set]
@@ -59,7 +60,8 @@ def print_result(result):
     for one in result:
         print one[0], '\n', one[1], '\n', one[2]
 
-dic, doc_id, N = load_data()
+dic, doc_id, N, archive_type = load_data()
+decode = Decoder(archive_type)
 query_list = get_query_list()
-result = execute_list(query_list, dic, doc_id, N)
+result = execute_list(query_list, dic, doc_id, N, decode)
 print_result(result)

@@ -30,14 +30,6 @@ class DocumentStreamReader:
 
 def parse_command_line():
     parser = argparse.ArgumentParser(description='compressed documents reader')
+    parser.add_argument('archivation', help='Input type of archivation simple9|varbyte')
     parser.add_argument('files', nargs='+', help='Input files (.gz or plain) to process')
     return parser.parse_args()
-
-
-# if __name__ == '__main__':
-#    reader = DocumentStreamReader(parse_command_line().files)
-#    # for doc in reader:
-#    doc = next(reader.__iter__())
-#    print doc.url
-#    print doc.text[:100]
-#    # print "%s\t%d bytes" % (doc.url, len(doc.text))

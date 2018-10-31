@@ -56,24 +56,29 @@ def parse_list(token_list):
 
     return token_list[pos]
 
+class Decoder(object):
+    def __init__(self, archive_type):
+        if archive_type == 'varbyte':
+            self.decode = varbyte.decode_array
+        else:
+            self.decode = simple9.decode
 
-def get_stream(word, dic):
-    # TODO give choise of compress algorythm, change hash algo
+def get_stream(word, dic, decode):
     compressed = md5.new(word).digest()
     code_list = dic.get(compressed)
     if code_list:
-        return varbyte.decode_array(code_list)
+        return decode.decode(code_list)
     else:
         return []
 
-def activate_node(node, betta, dic):
+def activate_node(node, betta, dic, decode):
     if node is not None:
         if isinstance(node, word_node):
-            node.stream = get_stream(node.value, dic)
+            node.stream = get_stream(node.value, dic, decode)
         if isinstance(node, not_node):
             node.max_pos = betta
-        activate_node(node.left, betta, dic)
-        activate_node(node.right, betta, dic)
+        activate_node(node.left, betta, dic, decode)
+        activate_node(node.right, betta, dic, decode)
 
 def execute(root):
     out_data = []

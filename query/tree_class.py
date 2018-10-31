@@ -22,7 +22,10 @@ class word_node(node):
         if self.position < len(self.stream):
             return self.stream[self.position], True
         else:
-            return self.stream[-1] + 1, False
+            if self.stream:
+                return self.stream[-1] + 1, False
+            else:
+                return 1, False
 
     def go_to(self, value):
         while self.position < len(self.stream):
