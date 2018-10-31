@@ -1,13 +1,8 @@
-# encoding: utf-8
 # Kononov Sergey BD-21
 
 import sys
 from struct import pack, unpack
 from array import array
-
-# TEST MODE
-# import time
-# import random
 
 def code(data_in):
     mask = int(b'01111111', 2)
@@ -70,22 +65,3 @@ def decode_array(binary_data):
         out_data.append(decode(elem))
 
     return out_data
-
-    
-# TEST
-#
-# test = range(1, 10000)
-# random.shuffle(test)
-# 
-# t1 = time.time()
-# test_sum = bool(test == decode_array(code_array(test)))
-# t2 = time.time()
-# 
-# t3 = time.time()
-# for i in range(1, 10000):
-#     test_sum |= i == decode(code(i))
-# t4 = time.time()
-# 
-# print 'varbyte tests :', test_sum * 'OK' + ~test_sum * 'ERROR'
-# print '[1, 10000] array compressed and decmpressed in', t2 - t1
-# print '[1, 10000] ints compressed and decmpressed in', t4 - t3

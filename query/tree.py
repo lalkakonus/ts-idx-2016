@@ -1,22 +1,25 @@
+#!usr/bin/python2
+# vim : set fileencoding=utf-8 :
+# Kononov Sergey BD-21
+
 import re
 import sys
 import md5
 from tree_class import *
-sys.path.insert(0, '../archive')
-# TODO load dic from file
-# from archive import dic
+sys.path.insert(0, 'archive')
 import simple9
 import varbyte 
 
-# TEST
-from test_data import *
+# TEST MODE
+# from test_data import *
+rus = r'[абвгдеёжзийклмнопрстуфхцчшщъчьыэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЧЬЫЭЮЯ\w]+'
 
 def tokenize(query):
-    tmp_list = re.findall(r'\w+|[\(\)\|&!]', query)
+    tmp_list = re.findall(rus + '|[\(\)\|&!]', query)
     token_list = []
     priority = 0
     for raw_token in tmp_list:
-        if re.match('\w+', raw_token):
+        if re.match(rus, raw_token):
             token_list.append(word_node(raw_token, priority))
         elif raw_token == '(':
             priority += 5
@@ -54,35 +57,28 @@ def parse_list(token_list):
     return token_list[pos]
 
 
-def get_stream(word):
-    # TODO load dic from file,
-    # dic = read_dict('filepath')
-    #global dic
-
+def get_stream(word, dic):
     # TODO give choise of compress algorythm, change hash algo
-    #compressed = md5.new(word).digest()
-    #return varbyte.decode_array(dic.get(compressed))
-    return dic.get(word)
+    compressed = md5.new(word).digest()
+    code_list = dic.get(compressed)
+    if code_list:
+        return varbyte.decode_array(code_list)
+    else:
+        return []
 
-def activate_node(node, betta):
+def activate_node(node, betta, dic):
     if node is not None:
         if isinstance(node, word_node):
-            node.stream = get_stream(node.value)
-            # print node.stream
+            node.stream = get_stream(node.value, dic)
         if isinstance(node, not_node):
             node.max_pos = betta
-        activate_node(node.left, betta)
-        activate_node(node.right, betta)
+        activate_node(node.left, betta, dic)
+        activate_node(node.right, betta, dic)
 
 def execute(root):
-    # change to load from file
-    # global doc_id
-
     out_data = []
-    value = 1
+    value, new_value, prev = 1, 0, 0
     valid = True
-    new_value = 0
-    prev = 0
 
     while prev != value:
         root.go_to(value)
@@ -96,7 +92,6 @@ def execute(root):
         if valid:
             value += 1
    
-    # return [doc_id[idx - 1] for idx in id_set]
     return out_data 
 
 def parse(query):

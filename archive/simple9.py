@@ -1,11 +1,6 @@
-# encoding: utf-8
 # Kononov Sergey BD-21
 
 from struct import pack, unpack
-
-# TEST MODE
-# import random
-# import time
 
 BITS = [1, 2, 3, 4, 5, 7, 9, 14, 28]
 BITS_LEN = len(BITS)
@@ -81,14 +76,3 @@ def decode(data_in):
         data_out += decode_word(data_in[i * 4: (i + 1) * 4])
 
     return data_out
-
-# TEST
-# 
-# test = range(1, 10000)
-# random.shuffle(test)
-# t1 = time.time()
-# res = test == decode(code(test))
-# t2 = time.time()
-# 
-# print 'simple9 archive tests :', res * 'OK' + ~res * 'ERROR'
-# print '[1, 10000] compressed and decompressed in', t2 - t1, 'sec'

@@ -1,19 +1,12 @@
 # encoding: utf-8
+# Kononov Sergey BD-21
+# simplyfied version query parser
 
 from varbyte_code import *
 import md5
 from archive import dic, doc_id
 
-# def retrive_assosiated(word):
-#     global dic
-# 
-#     idxs = dic.get(md5.new(word).digest())
-#     
-#     if idxs is not None:
-#         return uncode_buffer(idxs)
-#     else:
-#         return None
-
+# SIMPLE version
 def parse_query(query):
     global dic, doc_id
 
@@ -30,5 +23,5 @@ def parse_query(query):
         id_set = set(id_list)
 
     # return '\n'.join([doc_id[idx - 1] for idx in id_set])
-    # return [doc_id[idx - 1] for idx in id_set]
-    return id_set
+    return [doc_id[idx - 1] for idx in id_set]
+    # return id_set
