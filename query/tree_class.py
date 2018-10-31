@@ -1,3 +1,5 @@
+#!/usr/bin/python2
+
 class node(object):
     def __init__(self, priority): 
         self.priority = priority

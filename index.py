@@ -4,19 +4,18 @@
 from docreader import *
 sys.path.insert(0, 'archive')
 from archive import index_data
-import os
+import os, re, shutil
 
 # Create Data directory
 if not os.access('Data', os.F_OK):
     os.mkdir('Data')
 
-# Delete existance data
-if os.access('Data/compressed_id.pckl', os.F_OK):
-    os.remove('Data/compressed_id.pckl')
+# Clear existance data
+file_list = filter(lambda filename: re.match(r'.*\.pckl', filename),
+                   os.listdir('Data'))
+map(lambda filename: os.remove('Data/' + filename), file_list)
 
-if os.access('Data/compressed_dic.pckl', os.F_OK):
-    os.remove('Data/compressed_dic.pckl')
-
+# Parse command line arguments and index data
 if __name__ == '__main__':
     archivation_type = parse_command_line().archivation
     reader = DocumentStreamReader(parse_command_line().files)

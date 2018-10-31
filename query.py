@@ -49,11 +49,11 @@ def execute_list(query_list, dic, doc_id, N, decode):
 def get_query_list():
     query_list = []
 
-    line = raw_input('->')
-    query_list.append(line)
+    line = sys.stdin.readline()
+    query_list.append(line[:-1])
     while line:
-        line = raw_input('->')
-        query_list.append(line)
+        line = sys.stdin.readline()
+        query_list.append(line[:-1])
     return filter(lambda x: x != '', query_list)
 
 def print_result(result):

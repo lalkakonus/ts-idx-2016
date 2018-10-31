@@ -1,5 +1,6 @@
 #!usr/bin/python2
 # vim : set fileencoding=utf-8 :
+# coding : utf-8
 # Kononov Sergey BD-21
 
 import re
@@ -61,7 +62,8 @@ class Decoder(object):
         if archive_type == 'varbyte':
             self.decode = varbyte.decode_array
         else:
-            self.decode = simple9.decode
+            self.decode = varbyte.decode_array
+            # self.decode = simple9.decode
 
 def get_stream(word, dic, decode):
     compressed = md5.new(word).digest()
@@ -100,7 +102,7 @@ def execute(root):
     return out_data 
 
 def parse(query):
-    query = query.replace(' ', '')
+    query = query.replace(' ', '').decode('utf-8').lower().encode('utf-8')
     token_list = tokenize(query)
     root = parse_list(token_list)
     return root
